@@ -7,7 +7,7 @@ interface AppTitleProps {
 }
 const AppTitle = ({ onClick }: AppTitleProps) => {
   return (
-    <Wrapper onClick={onClick} hasPointerCursor={Boolean(onClick)}>
+    <Wrapper onClick={onClick} $hasPointerCursor={Boolean(onClick)}>
       <FontAwesomeIcon icon={faHeadphones} />
       <strong>ASMR</strong>
       <span>oom</span>
@@ -17,12 +17,12 @@ const AppTitle = ({ onClick }: AppTitleProps) => {
 
 export default AppTitle;
 
-const Wrapper = styled.h1<{ hasPointerCursor: boolean }>`
+const Wrapper = styled.h1<{ $hasPointerCursor: boolean }>`
   display: flex;
   align-items: center;
   font-family: "Unbounded";
   user-select: none;
-  cursor: ${({ hasPointerCursor }) => hasPointerCursor && "pointer"};
+  cursor: ${({ $hasPointerCursor }) => $hasPointerCursor && "pointer"};
 
   svg {
     margin-right: 10px;
