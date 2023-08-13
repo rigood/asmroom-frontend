@@ -61,7 +61,7 @@ const CustomSwiper = styled(Swiper)`
   .swiper-pagination-bullets {
     bottom: 30px;
     .swiper-pagination-bullet {
-      background: white;
+      background: ${({ theme }) => theme.white};
     }
   }
 

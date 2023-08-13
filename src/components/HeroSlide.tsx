@@ -8,7 +8,7 @@ interface HeroSlideProps {
 }
 const HeroSlide = ({ youtubeId, title, desc }: HeroSlideProps) => {
   return (
-    <Wrapper url={getYoutubeThumbnail(youtubeId)}>
+    <Wrapper $url={getYoutubeThumbnail(youtubeId)}>
       <Title>{title}</Title>
       <Desc>{desc}</Desc>
     </Wrapper>
@@ -17,10 +17,10 @@ const HeroSlide = ({ youtubeId, title, desc }: HeroSlideProps) => {
 
 export default HeroSlide;
 
-const Wrapper = styled.div<{ url: string }>`
+const Wrapper = styled.div<{ $url: string }>`
   height: 50vh;
   background: linear-gradient(rgba(59, 54, 101, 0.5), rgba(0, 0, 0, 1)),
-    url(${({ url }) => url});
+    url(${({ $url }) => $url});
   background-size: cover;
   background-position: top;
   position: relative;

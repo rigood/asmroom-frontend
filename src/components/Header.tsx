@@ -107,7 +107,6 @@ const Wrapper = styled(motion.header)`
   height: ${({ theme }) => theme.headerHeight + "px"};
   position: fixed;
   top: 0;
-  background-color: transparent;
   z-index: 990;
 `;
 

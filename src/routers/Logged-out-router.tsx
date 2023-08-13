@@ -6,13 +6,13 @@ import Login from "../pages/Login";
 
 const LoggedOutRouter = createBrowserRouter([
   {
+    path: "/create-account",
+    element: <CreateAccount />,
+  },
+  {
     element: <Layout />,
     children: [
       ...CommonRouter,
-      {
-        path: "/create-account",
-        element: <CreateAccount />,
-      },
       {
         path: "/login",
         element: <Login />,
