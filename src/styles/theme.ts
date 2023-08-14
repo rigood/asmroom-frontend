@@ -14,6 +14,7 @@ export const dark: DefaultTheme = {
   ...common,
   bgColor: "linear-gradient(to right, #242233, #3B3665)",
   textColor: "#FFFFFF",
+  textColorBeforeHover: "#9CA3AF",
   inputBgColor: "#262438",
 };
 
@@ -22,5 +23,6 @@ export const light: DefaultTheme = {
   primary: "#755CFD",
   bgColor: "#FFFFFF",
   textColor: "#111111",
+  textColorBeforeHover: "#11111150",
   inputBgColor: "#262438",
 };

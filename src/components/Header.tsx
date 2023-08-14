@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import {
   motion,
@@ -45,9 +45,6 @@ const Header = () => {
     };
   }, []);
 
-  const navigate = useNavigate();
-  const moveToHomePage = () => navigate("/");
-
   return (
     <Wrapper
       animate={scrollAnimation}
@@ -58,7 +55,7 @@ const Header = () => {
         <MobileMenu>
           <IconButton icon={faBars} title="메뉴" size={20} />
         </MobileMenu>
-        <AppTitle onClick={moveToHomePage} />
+        <AppTitle />
         <LinkContainer>
           <LinkItem to="/">홈</LinkItem>
           <LinkItem to="/category">카테고리</LinkItem>
@@ -70,6 +67,7 @@ const Header = () => {
             <IconButton
               icon={faUser}
               title="사용자"
+              shouldFocus
               onClick={toggleUserDropdownMenu}
               ref={userIconRef}
             />
@@ -141,8 +139,19 @@ const LinkContainer = styled.div`
   }
 `;
 
-const LinkItem = styled(Link)`
+const LinkItem = styled(NavLink)`
   padding: 5px;
+  color: ${({ theme }) => theme.textColorBeforeHover};
+
+  &.active {
+    color: ${({ theme }) => theme.textColor};
+  }
+
+  @media screen and (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: ${({ theme }) => theme.textColor};
+    }
+  }
 `;
 
 const Menu = styled.nav`
@@ -190,4 +199,13 @@ const UserDropdownMenu = styled.div`
 const UserLink = styled(Link)`
   padding: 8px 16px;
   font-size: 14px;
+  border-radius: 5px;
+
+  @media screen and (hover: hover) and (pointer: fine) {
+    &:hover,
+    &:focus {
+      color: ${({ theme }) => theme.textColor};
+      background: ${({ theme }) => theme.textColorBeforeHover};
+    }
+  }
 `;

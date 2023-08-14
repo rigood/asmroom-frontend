@@ -58,6 +58,8 @@ const Home = () => {
 export default Home;
 
 const CustomSwiper = styled(Swiper)`
+  padding-top: 10px;
+
   .swiper-pagination-bullets {
     bottom: 30px;
     .swiper-pagination-bullet {
@@ -66,6 +68,7 @@ const CustomSwiper = styled(Swiper)`
   }
 
   @media screen and (max-width: 1100px) {
+    padding-top: 0;
     .swiper-pagination-bullets {
       bottom: 10px;
     }

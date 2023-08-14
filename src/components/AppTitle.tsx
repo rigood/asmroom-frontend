@@ -1,13 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeadphones } from "@fortawesome/free-solid-svg-icons";
 
-interface AppTitleProps {
-  onClick?: () => void;
-}
-const AppTitle = ({ onClick }: AppTitleProps) => {
+const AppTitle = () => {
+  const navigate = useNavigate();
+  const moveToHomePage = () => navigate("/");
+
   return (
-    <Wrapper onClick={onClick} $hasPointerCursor={Boolean(onClick)}>
+    <Wrapper onClick={moveToHomePage}>
       <FontAwesomeIcon icon={faHeadphones} />
       <strong>ASMR</strong>
       <span>oom</span>
@@ -17,12 +18,13 @@ const AppTitle = ({ onClick }: AppTitleProps) => {
 
 export default AppTitle;
 
-const Wrapper = styled.h1<{ $hasPointerCursor: boolean }>`
+const Wrapper = styled.h1`
   display: flex;
   align-items: center;
   font-family: "Unbounded";
   user-select: none;
-  cursor: ${({ $hasPointerCursor }) => $hasPointerCursor && "pointer"};
+  cursor: pointer;
+  color: ${({ theme }) => theme.textColor};
 
   svg {
     margin-right: 10px;

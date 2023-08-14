@@ -4,6 +4,7 @@ import CommonRouter from "./CommonRouter";
 
 const LoggedInRouter = createBrowserRouter([
   {
+    path: "/",
     element: <Layout />,
     children: [...CommonRouter],
   },

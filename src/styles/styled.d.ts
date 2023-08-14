@@ -6,6 +6,7 @@ declare module "styled-components" {
     disabled: string;
     bgColor: string;
     textColor: string;
+    textColorBeforeHover: string;
     inputBgColor: string;
     white: string;
     red: string;

@@ -10,11 +10,12 @@ const LoggedOutRouter = createBrowserRouter([
     element: <CreateAccount />,
   },
   {
+    path: "/",
     element: <Layout />,
     children: [
       ...CommonRouter,
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
     ],
