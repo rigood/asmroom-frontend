@@ -1,8 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { LoginMutation } from "../__generated__/graphql";
+import {
+  LoginMutation,
+  LoginMutationVariables,
+} from "../__generated__/graphql";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import Form from "../components/Form";
@@ -36,6 +39,8 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPathname = location.state?.from?.pathname || "/";
 
   const onCompleted = (data: LoginMutation) => {
     const {
@@ -51,11 +56,14 @@ const Login = () => {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       authTokenVar(token);
       isLoggedInVar(true);
-      navigate("/");
+      navigate(fromPathname, { replace: true });
     }
   };
 
-  const [login, { loading: isMutationLoading }] = useMutation(LOGIN_MUTATION, {
+  const [login, { loading: isMutationLoading }] = useMutation<
+    LoginMutation,
+    LoginMutationVariables
+  >(LOGIN_MUTATION, {
     onCompleted,
   });
 
@@ -148,5 +156,5 @@ const SLink = styled(Link)<{ $disabled?: boolean }>`
   padding: 0 8px;
   font-size: 14px;
   opacity: ${({ $disabled }) => $disabled && 0.3};
-  cursor: ${({ $disabled }) => $disabled && "not-allowed"};
+  cursor: ${({ $disabled }) => $disabled && "default"};
 `;

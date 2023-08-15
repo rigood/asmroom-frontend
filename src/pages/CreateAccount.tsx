@@ -3,7 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { CreateAccountMutation, UserRole } from "../__generated__/graphql";
+import {
+  UserRole,
+  CreateAccountMutation,
+  CreateAccountMutationVariables,
+} from "../__generated__/graphql";
 import AppTitle from "../components/AppTitle";
 import Form from "../components/Form";
 import InputWithLabel from "../components/InputWithLabel";
@@ -63,10 +67,10 @@ const CreateAccount = () => {
     }
   };
 
-  const [createAccount, { loading: isMutationLoading }] = useMutation(
-    CREATE_ACCOUNT_MUTATION,
-    { onCompleted }
-  );
+  const [createAccount, { loading: isMutationLoading }] = useMutation<
+    CreateAccountMutation,
+    CreateAccountMutationVariables
+  >(CREATE_ACCOUNT_MUTATION, { onCompleted });
 
   const onSubmit = handleSubmit((data: CreateAccountForm) => {
     if (isMutationLoading) return;

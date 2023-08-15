@@ -55,7 +55,7 @@ const StyledInput = styled.input<{ type: string }>`
       }
       &:disabled {
         background: ${theme.disabled};
-        cursor: not-allowed;
+        cursor: initial;
       }
     `};
 `;
