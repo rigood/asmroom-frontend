@@ -1,15 +1,42 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useReactiveVar } from "@apollo/client";
-import { RouterProvider } from "react-router-dom";
 import { isLoggedInVar } from "./apollo";
-import LoggedInRouter from "./routers/Logged-in-router";
-import LoggedOutRouter from "./routers/Logged-out-router";
+import PublicRoute from "./routes/PublicRoute";
+import PrivateRoute from "./routes/PrivateRoute";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import CreateAccount from "./pages/CreateAccount";
+import Login from "./pages/Login";
+import MyProfile from "./pages/user/MyProfile";
 
-function App() {
+const App = () => {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
   return (
-    <RouterProvider router={isLoggedIn ? LoggedInRouter : LoggedOutRouter} />
+    <BrowserRouter>
+      <Routes>
+        {/* Hedader ⭕ */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+
+          <Route element={<PublicRoute isAllowed={!isLoggedIn} />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+
+          <Route element={<PrivateRoute isAllowed={isLoggedIn} />}>
+            <Route path="/myprofile" element={<MyProfile />} />
+          </Route>
+        </Route>
+
+        {/* Hedader ❌ */}
+        <Route element={<PublicRoute isAllowed={!isLoggedIn} />}>
+          <Route path="/create-account" element={<CreateAccount />} />
+        </Route>
+
+        <Route path="*" element={<div>Not Found</div>} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
