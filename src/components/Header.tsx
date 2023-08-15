@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   motion,
@@ -12,7 +12,14 @@ import {
   faBars,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { HEADER_HEIGHT, HEADER_INITIAL, HEADER_SCROLL } from "../constants";
+import {
+  HEADER_HEIGHT,
+  HEADER_INITIAL,
+  HEADER_SCROLL,
+  LOCALSTORAGE_TOKEN,
+} from "../constants";
+import { useReactiveVar } from "@apollo/client";
+import { authTokenVar, isLoggedInVar } from "../apollo";
 import AppTitle from "./AppTitle";
 import IconButton from "./IconButton";
 
@@ -45,6 +52,16 @@ const Header = () => {
     };
   }, []);
 
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem(LOCALSTORAGE_TOKEN);
+    authTokenVar(null);
+    isLoggedInVar(false);
+    navigate("/");
+  };
+
   return (
     <Wrapper
       animate={scrollAnimation}
@@ -76,8 +93,25 @@ const Header = () => {
               className={userDropdownMenuOpen ? "active" : "inactive"}
             >
               <UserDropdownMenu>
-                <UserLink to="/login">로그인</UserLink>
-                <UserLink to="/create-account">회원가입</UserLink>
+                {isLoggedIn ? (
+                  <>
+                    <UserStyles as={Link} to="/myprofile">
+                      내 프로필
+                    </UserStyles>
+                    <UserStyles as="button" type="button" onClick={logout}>
+                      로그아웃
+                    </UserStyles>
+                  </>
+                ) : (
+                  <>
+                    <UserStyles as={Link} to="/login">
+                      로그인
+                    </UserStyles>
+                    <UserStyles as={Link} to="/create-account">
+                      회원가입
+                    </UserStyles>
+                  </>
+                )}
               </UserDropdownMenu>
             </UserDropdownMenuWrapper>
           </MenuItem>
@@ -196,10 +230,11 @@ const UserDropdownMenu = styled.div`
   padding: 8px;
 `;
 
-const UserLink = styled(Link)`
+const UserStyles = styled.div<{ as: string }>`
   padding: 8px 16px;
   font-size: 14px;
   border-radius: 5px;
+  text-align: ${({ as }) => as === "button" && "left"};
 
   @media screen and (hover: hover) and (pointer: fine) {
     &:hover,
