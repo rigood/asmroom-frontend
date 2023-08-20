@@ -112,16 +112,16 @@ const CreateAccount = () => {
           </UserRoleBox>
           <InputWithLabel
             label={labelByIsArtist}
-            placeholder="1~10자 이내로 입력해주세요."
+            placeholder="2~20자 이내로 입력해주세요."
             {...register("nickname", {
               required: `${labelByIsArtist}을 입력해주세요.`,
               minLength: {
-                value: 1,
-                message: `${labelByIsArtist}을 1~10자 이내로 입력해주세요.`,
+                value: 2,
+                message: `${labelByIsArtist}을 2~20자 이내로 입력해주세요.`,
               },
               maxLength: {
-                value: 10,
-                message: `${labelByIsArtist}을 1~10자 이내로 입력해주세요.`,
+                value: 20,
+                message: `${labelByIsArtist}을 2~20자 이내로 입력해주세요.`,
               },
             })}
           />

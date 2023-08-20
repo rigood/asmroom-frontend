@@ -8,9 +8,22 @@ import Home from "./pages/Home";
 import CreateAccount from "./pages/CreateAccount";
 import Login from "./pages/Login";
 import MyProfile from "./pages/user/MyProfile";
+import { useMe } from "./hooks/useMe";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const App = () => {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const { data: userData, loading, error } = useMe(!isLoggedIn);
+
+  if (!userData || loading || error) {
+    return (
+      <Wrapper>
+        <Loading icon={faSpinner} size="5x" spin />
+      </Wrapper>
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -24,6 +37,10 @@ const App = () => {
           </Route>
 
           <Route element={<PrivateRoute isAllowed={isLoggedIn} />}>
+            <Route path="/myprofile" element={<MyProfile />} />
+            {/* 🎤 Artist */}
+            <Route path="/myprofile" element={<MyProfile />} />
+            {/* 🎧 Listener */}
             <Route path="/myprofile" element={<MyProfile />} />
           </Route>
         </Route>
@@ -40,3 +57,12 @@ const App = () => {
 };
 
 export default App;
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Loading = styled(FontAwesomeIcon)``;

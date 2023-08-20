@@ -14,6 +14,6 @@ export const ME_QUERY = gql`
   }
 `;
 
-export const useMe = () => {
-  return useQuery<MeQuery>(ME_QUERY);
+export const useMe = (shouldSkip: boolean) => {
+  return useQuery<MeQuery>(ME_QUERY, { skip: shouldSkip });
 };

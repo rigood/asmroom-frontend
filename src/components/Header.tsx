@@ -11,6 +11,7 @@ import {
   faMagnifyingGlass,
   faBars,
   faUser,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   HEADER_HEIGHT,
@@ -22,8 +23,11 @@ import { useReactiveVar } from "@apollo/client";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import AppTitle from "./AppTitle";
 import IconButton from "./IconButton";
+import { useMe } from "../hooks/useMe";
+import { UserRole } from "../__generated__/graphql";
 
 const Header = () => {
+  // 스크롤 애니메이션
   const { scrollY } = useScroll();
   const scrollAnimation = useAnimation();
   useMotionValueEvent(scrollY, "change", (latestScrollY) => {
@@ -34,8 +38,12 @@ const Header = () => {
     }
   });
 
+  // 드롭다운 메뉴 상태관리
   const [userDropdownMenuOpen, setUserDropdownMenuOpen] = useState(false);
-  const toggleUserDropdownMenu = () => setUserDropdownMenuOpen((prev) => !prev);
+  const toggleUserDropdownMenu = () => {
+    if (userDropdownMenuOpen) return;
+    setUserDropdownMenuOpen((prev) => !prev);
+  };
 
   const userIconRef = useRef<HTMLButtonElement>(null);
 
@@ -52,14 +60,21 @@ const Header = () => {
     };
   }, []);
 
+  // 로그인 정보, 로그아웃
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const navigate = useNavigate();
+  const { data: userData } = useMe(!isLoggedIn);
+  console.log(`isLoggedIn(${isLoggedIn}) data:`, userData);
 
+  const navigate = useNavigate();
   const logout = () => {
-    localStorage.removeItem(LOCALSTORAGE_TOKEN);
-    authTokenVar(null);
-    isLoggedInVar(false);
-    navigate("/");
+    setUserDropdownMenuOpen(false);
+
+    setTimeout(() => {
+      localStorage.removeItem(LOCALSTORAGE_TOKEN);
+      authTokenVar(null);
+      isLoggedInVar(false);
+      navigate("/");
+    }, 300);
   };
 
   return (
@@ -77,6 +92,12 @@ const Header = () => {
           <LinkItem to="/">홈</LinkItem>
           <LinkItem to="/category">카테고리</LinkItem>
           <LinkItem to="/community">커뮤니티</LinkItem>
+          {isLoggedIn && userData?.me.role === UserRole.Artist && (
+            <LinkItem to="/studio">MY STUDIO</LinkItem>
+          )}
+          {isLoggedIn && userData?.me.role === UserRole.Listener && (
+            <LinkItem to="/room/:id">MY ROOM</LinkItem>
+          )}
         </LinkContainer>
         <Menu>
           <IconButton icon={faMagnifyingGlass} title="검색" />
@@ -95,8 +116,8 @@ const Header = () => {
               <UserDropdownMenu>
                 {isLoggedIn ? (
                   <>
-                    <UserStyles as={Link} to="/myprofile">
-                      내 프로필
+                    <UserStyles as={Link} to="/my-profile">
+                      내 정보
                     </UserStyles>
                     <UserStyles as="button" type="button" onClick={logout}>
                       로그아웃
@@ -115,6 +136,7 @@ const Header = () => {
               </UserDropdownMenu>
             </UserDropdownMenuWrapper>
           </MenuItem>
+          <IconButton icon={faBell} title="알림" />
         </Menu>
       </Container>
     </Wrapper>

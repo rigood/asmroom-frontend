@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import {
@@ -42,6 +42,7 @@ const Login = () => {
   const location = useLocation();
   const fromPathname = location.state?.from?.pathname || "/";
 
+  const client = useApolloClient();
   const onCompleted = (data: LoginMutation) => {
     const {
       login: { ok, token, error },
@@ -57,6 +58,7 @@ const Login = () => {
       authTokenVar(token);
       isLoggedInVar(true);
       navigate(fromPathname, { replace: true });
+      client.resetStore();
     }
   };
 
