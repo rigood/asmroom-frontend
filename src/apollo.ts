@@ -15,7 +15,7 @@ export const isLoggedInVar = makeVar(Boolean(token));
 const httpLink = createHttpLink({
   uri:
     process.env.NODE_ENV === "production"
-      ? "https://asmroom-backend.herokuapp.com/graphql"
+      ? "https://asmroom-backend-b73cde5014a8.herokuapp.com/graphql"
       : "http://localhost:4000/graphql",
 });
 
