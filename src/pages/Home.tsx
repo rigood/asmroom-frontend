@@ -37,7 +37,7 @@ const Home = () => {
         <ListTitle title="✨ Myaling ASMR" channelId={2} />
         <EpisodeListGrid channelId={2} />
         <ListTitle title="💎 Vito ASMR" channelId={6} />
-        <EpisodeListGrid channelId={4} />
+        <EpisodeListGrid channelId={6} />
         <ListTitle title="🧸 Latte ASMR" channelId={3} />
         <EpisodeListGrid channelId={3} />
       </Container>
