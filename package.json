@@ -1,6 +1,10 @@
 {
   "name": "asmroom-frontend",
   "version": "0.1.0",
+  "engine": {
+    "node": "18.13.0",
+    "npm": "8.19.3"
+  },
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.17",
@@ -62,9 +66,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "engine": {
-    "node": "18.13.0",
-    "npm": "8.19.3"
   }
 }
