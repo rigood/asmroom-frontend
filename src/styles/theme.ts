@@ -1,28 +1,20 @@
 import { DefaultTheme } from "styled-components";
-import { HEADER_HEIGHT } from "../constants";
 
-export const common = {
-  headerHeight: HEADER_HEIGHT,
-  white: "#FFFFFF",
-  red: "#FD3043",
-  pink: "#FF27A3",
-  primary: "#845EF7",
-  disabled: "#717171",
-};
+export const PRIMARY_COLOR = "#845EF7";
 
-export const dark: DefaultTheme = {
-  ...common,
-  bgColor: "linear-gradient(to right, #242233, #3B3665)",
+const bgGradientStartColor = "#242233";
+const bgGradientEndColor = "#3B3665";
+
+export const theme: DefaultTheme = {
   textColor: "#FFFFFF",
-  textColorBeforeHover: "#9CA3AF",
-  inputBgColor: "#262438",
-};
-
-export const light: DefaultTheme = {
-  ...common,
-  primary: "#755CFD",
-  bgColor: "#FFFFFF",
-  textColor: "#111111",
-  textColorBeforeHover: "#11111150",
-  inputBgColor: "#262438",
+  textInvertedColor: "#9CA3AF",
+  primary: "#845EF7",
+  surface: "#262438",
+  disabled: "#717171",
+  white: "#FFFFFF",
+  background: `linear-gradient(to right, ${bgGradientStartColor}, ${bgGradientEndColor})`,
+  headerHeight: "74px",
+  maxWidthDesktop: "1100px",
+  maxWidthTablet: "768px",
+  maxWidthMobile: "640px",
 };

@@ -16,5 +16,5 @@ const Layout = () => {
 export default Layout;
 
 const Wrapper = styled.div`
-  margin-top: ${(props) => props.theme.headerHeight + "px"};
+  margin-top: ${(props) => props.theme.headerHeight};
 `;

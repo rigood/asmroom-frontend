@@ -10,6 +10,7 @@ export const ME_QUERY = gql`
       role
       verified
       photo
+      channelId
     }
   }
 `;

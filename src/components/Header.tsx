@@ -1,43 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import {
-  motion,
-  useScroll,
-  useAnimation,
-  useMotionValueEvent,
-} from "framer-motion";
-import {
-  faMagnifyingGlass,
-  faBars,
-  faUser,
-  faBell,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  HEADER_HEIGHT,
-  HEADER_INITIAL,
-  HEADER_SCROLL,
-  LOCALSTORAGE_TOKEN,
-} from "../constants";
 import { useReactiveVar } from "@apollo/client";
 import { authTokenVar, isLoggedInVar } from "../apollo";
-import AppTitle from "./AppTitle";
-import IconButton from "./IconButton";
+import styled from "styled-components";
 import { useMe } from "../hooks/useMe";
 import { UserRole } from "../__generated__/graphql";
+import { LOCALSTORAGE_TOKEN } from "../constants";
+import { faMagnifyingGlass, faUser } from "@fortawesome/free-solid-svg-icons";
+import AppTitle from "./AppTitle";
+import IconButton from "./IconButton";
 
 const Header = () => {
-  // 스크롤 애니메이션
-  const { scrollY } = useScroll();
-  const scrollAnimation = useAnimation();
-  useMotionValueEvent(scrollY, "change", (latestScrollY) => {
-    if (latestScrollY > HEADER_HEIGHT) {
-      scrollAnimation.start(HEADER_SCROLL);
-    } else {
-      scrollAnimation.start(HEADER_INITIAL);
-    }
-  });
-
   // 드롭다운 메뉴 상태관리
   const [userDropdownMenuOpen, setUserDropdownMenuOpen] = useState(false);
   const toggleUserDropdownMenu = () => {
@@ -60,12 +33,15 @@ const Header = () => {
     };
   }, []);
 
+  // 검색 페이지 이동
+  const navigate = useNavigate();
+  const moveToSearch = () => navigate("/search");
+
   // 로그인 정보, 로그아웃
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data: userData } = useMe(!isLoggedIn);
   console.log(`isLoggedIn(${isLoggedIn}) data:`, userData);
 
-  const navigate = useNavigate();
   const logout = () => {
     setUserDropdownMenuOpen(false);
 
@@ -78,66 +54,63 @@ const Header = () => {
   };
 
   return (
-    <Wrapper
-      animate={scrollAnimation}
-      variants={motionVariants}
-      initial={HEADER_INITIAL}
-    >
+    <Wrapper>
       <Container>
-        <MobileMenu>
-          <IconButton icon={faBars} title="메뉴" size={20} />
-        </MobileMenu>
         <AppTitle />
-        <LinkContainer>
-          <LinkItem to="/">홈</LinkItem>
-          <LinkItem to="/category">카테고리</LinkItem>
-          <LinkItem to="/community">커뮤니티</LinkItem>
+        <NavLinkContainer>
+          <SNavLink to="/">홈</SNavLink>
+          <SNavLink to="/category">카테고리</SNavLink>
+          <SNavLink to="/reviews">리뷰</SNavLink>
           {isLoggedIn && userData?.me.role === UserRole.Artist && (
-            <LinkItem to="/studio">MY STUDIO</LinkItem>
+            <SNavLink to="/channel/episodes">My Channel</SNavLink>
           )}
           {isLoggedIn && userData?.me.role === UserRole.Listener && (
-            <LinkItem to="/room/:id">MY ROOM</LinkItem>
+            <SNavLink to={`/users/${userData?.me.id}/reviews`}>
+              My Room
+            </SNavLink>
           )}
-        </LinkContainer>
-        <Menu>
-          <IconButton icon={faMagnifyingGlass} title="검색" />
-          <MenuItem>
+        </NavLinkContainer>
+        <IconButtonContainer>
+          <IconButton
+            icon={faMagnifyingGlass}
+            title="검색"
+            onClick={moveToSearch}
+          />
+          <IconButtonWrapper>
             <IconButton
               icon={faUser}
               title="사용자"
-              shouldFocus
               onClick={toggleUserDropdownMenu}
+              shouldFocus
               ref={userIconRef}
             />
             <UserDropdownMenuWrapper
-              open={userDropdownMenuOpen}
               className={userDropdownMenuOpen ? "active" : "inactive"}
             >
               <UserDropdownMenu>
                 {isLoggedIn ? (
                   <>
-                    <UserStyles as={Link} to="/my-profile">
+                    <UserMenu as={Link} to="/profile">
                       내 정보
-                    </UserStyles>
-                    <UserStyles as="button" type="button" onClick={logout}>
+                    </UserMenu>
+                    <UserMenu as="button" type="button" onClick={logout}>
                       로그아웃
-                    </UserStyles>
+                    </UserMenu>
                   </>
                 ) : (
                   <>
-                    <UserStyles as={Link} to="/login">
+                    <UserMenu as={Link} to="/login">
                       로그인
-                    </UserStyles>
-                    <UserStyles as={Link} to="/create-account">
+                    </UserMenu>
+                    <UserMenu as={Link} to="/create-account">
                       회원가입
-                    </UserStyles>
+                    </UserMenu>
                   </>
                 )}
               </UserDropdownMenu>
             </UserDropdownMenuWrapper>
-          </MenuItem>
-          <IconButton icon={faBell} title="알림" />
-        </Menu>
+          </IconButtonWrapper>
+        </IconButtonContainer>
       </Container>
     </Wrapper>
   );
@@ -145,59 +118,44 @@ const Header = () => {
 
 export default Header;
 
-const motionVariants = {
-  initial: {
-    background: "rgba(0,21,60,0)",
-    backdropFilter: "blur(0px)",
-  },
-  scroll: {
-    background: "rgba(0,21,60,0.8)",
-    backdropFilter: "blur(3px)",
-  },
-};
-
-const Wrapper = styled(motion.header)`
+const Wrapper = styled.header`
   width: 100%;
-  height: ${({ theme }) => theme.headerHeight + "px"};
+  height: ${({ theme }) => theme.headerHeight};
   position: fixed;
   top: 0;
-  z-index: 990;
+  z-index: 99;
+  background: ${({ theme }) => theme.background};
+  box-shadow: inset 0 -1px hsla(0, 0%, 100%, 0.1);
 `;
 
 const Container = styled.div`
   width: 100%;
+  max-width: ${({ theme }) => theme.maxWidthDesktop};
   height: 100%;
-  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   padding: 0 16px;
 
-  @media screen and (max-width: 1100px) {
+  @media screen and (max-width: ${({ theme }) => theme.maxWidthDesktop}) {
     justify-content: space-between;
   }
 `;
 
-const MobileMenu = styled.div`
-  display: none;
-`;
-
-const LinkContainer = styled.div`
+const NavLinkContainer = styled.div`
   flex: 1;
   margin-left: 40px;
   display: flex;
   column-gap: 20px;
-  font-family: "Pretendard400";
-  font-size: 16px;
 
-  @media screen and (max-width: 1100px) {
+  @media screen and (max-width: ${({ theme }) => theme.maxWidthTablet}) {
     display: none;
   }
 `;
 
-const LinkItem = styled(NavLink)`
+const SNavLink = styled(NavLink)`
   padding: 5px;
-  color: ${({ theme }) => theme.textColorBeforeHover};
+  color: ${({ theme }) => theme.textInvertedColor};
 
   &.active {
     color: ${({ theme }) => theme.textColor};
@@ -210,23 +168,23 @@ const LinkItem = styled(NavLink)`
   }
 `;
 
-const Menu = styled.nav`
+const IconButtonContainer = styled.div`
   display: flex;
   align-items: center;
   column-gap: 10px;
 `;
 
-const MenuItem = styled.div`
+const IconButtonWrapper = styled.div`
   position: relative;
 `;
 
-const UserDropdownMenuWrapper = styled.div<{ open: boolean }>`
+const UserDropdownMenuWrapper = styled.div`
+  width: 120px;
   position: absolute;
   top: calc(100% + 5px);
   right: 0;
-  width: 120px;
   z-index: 999;
-  background: ${({ theme }) => theme.bgColor};
+  background: ${({ theme }) => theme.background};
   border-radius: 10px;
   box-shadow: 0 2px 10px 0 rgba(0, 21, 60, 0);
 
@@ -252,17 +210,17 @@ const UserDropdownMenu = styled.div`
   padding: 8px;
 `;
 
-const UserStyles = styled.div<{ as: string }>`
+const UserMenu = styled.div<{ as: string }>`
   padding: 8px 16px;
-  font-size: 14px;
   border-radius: 5px;
+  font-size: 14px;
   text-align: ${({ as }) => as === "button" && "left"};
 
   @media screen and (hover: hover) and (pointer: fine) {
     &:hover,
     &:focus {
+      background: ${({ theme }) => theme.textInvertedColor};
       color: ${({ theme }) => theme.textColor};
-      background: ${({ theme }) => theme.textColorBeforeHover};
     }
   }
 `;

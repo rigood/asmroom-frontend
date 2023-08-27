@@ -1,12 +1,10 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./apollo";
-import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "styled-components";
-import { dark, light } from "./styles/theme";
+import { client } from "./apollo";
+import { theme } from "./styles/theme";
 import GlobalStyle from "./styles/GlobalStyle";
+import App from "./App";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,11 +12,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <ApolloProvider client={client}>
-    <ThemeProvider theme={dark}>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
+      <App />
     </ThemeProvider>
   </ApolloProvider>
 );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
@@ -10,14 +10,14 @@ import {
 } from "../__generated__/graphql";
 import AppTitle from "../components/AppTitle";
 import Form from "../components/Form";
-import InputWithLabel from "../components/InputWithLabel";
+import Input from "../components/Input";
 import FormErrorMsg from "../components/FormErrorMsg";
 
 interface CreateAccountForm {
   nickname: string;
   email: string;
   password: string;
-  role?: UserRole;
+  role: UserRole;
 }
 
 const CREATE_ACCOUNT_MUTATION = gql`
@@ -31,7 +31,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
 
 const CreateAccount = () => {
   const [isArtist, setIsArtist] = useState(false);
-  const labelByIsArtist = isArtist ? "채널명" : "닉네임";
+  const labelByIsArtist = isArtist ? "닉네임(채널명)" : "닉네임";
 
   const {
     register,
@@ -72,10 +72,11 @@ const CreateAccount = () => {
     CreateAccountMutationVariables
   >(CREATE_ACCOUNT_MUTATION, { onCompleted });
 
-  const onSubmit = handleSubmit((data: CreateAccountForm) => {
+  const onValidSubmit = (data: CreateAccountForm) => {
     if (isMutationLoading) return;
 
     const { nickname, email, password } = data;
+
     createAccount({
       variables: {
         createAccountInput: {
@@ -86,13 +87,13 @@ const CreateAccount = () => {
         },
       },
     });
-  });
+  };
 
   return (
     <Wrapper>
       <AppTitle />
       <Title>회원가입</Title>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={handleSubmit(onValidSubmit)}>
         <>
           <UserRoleBox>
             <UserRoleItem
@@ -110,25 +111,25 @@ const CreateAccount = () => {
               아티스트
             </UserRoleItem>
           </UserRoleBox>
-          <InputWithLabel
+          <Input
             label={labelByIsArtist}
             placeholder="2~20자 이내로 입력해주세요."
             {...register("nickname", {
               required: `${labelByIsArtist}을 입력해주세요.`,
               minLength: {
                 value: 2,
-                message: `${labelByIsArtist}을 2~20자 이내로 입력해주세요.`,
+                message: `${labelByIsArtist} 2~20자 이내로 입력해주세요.`,
               },
               maxLength: {
                 value: 20,
-                message: `${labelByIsArtist}을 2~20자 이내로 입력해주세요.`,
+                message: `${labelByIsArtist} 2~20자 이내로 입력해주세요.`,
               },
             })}
           />
           {errors?.nickname && (
             <FormErrorMsg msg={String(errors.nickname.message)} />
           )}
-          <InputWithLabel
+          <Input
             label="이메일"
             type="email"
             placeholder="인증 메일이 발송될 이메일을 입력해주세요."
@@ -141,7 +142,7 @@ const CreateAccount = () => {
             })}
           />
           {errors?.email && <FormErrorMsg msg={String(errors.email.message)} />}
-          <InputWithLabel
+          <Input
             label="비밀번호"
             type="password"
             placeholder="4~16자 이내로 입력해주세요."
@@ -160,7 +161,7 @@ const CreateAccount = () => {
           {errors?.password && (
             <FormErrorMsg msg={String(errors.password?.message)} />
           )}
-          <InputWithLabel
+          <Input
             type="submit"
             value="가입하기"
             disabled={!isValid || isMutationLoading}
@@ -202,7 +203,7 @@ const UserRoleItem = styled.div<{ selected: boolean }>`
   padding: 16px;
   text-align: center;
   background: ${({ selected, theme }) =>
-    selected ? theme.primary : theme.inputBgColor};
+    selected ? theme.primary : theme.surface};
   border-radius: 10px;
   cursor: pointer;
 

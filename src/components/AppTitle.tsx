@@ -5,10 +5,10 @@ import { faHeadphones } from "@fortawesome/free-solid-svg-icons";
 
 const AppTitle = () => {
   const navigate = useNavigate();
-  const moveToHomePage = () => navigate("/");
+  const moveToHome = () => navigate("/");
 
   return (
-    <Wrapper onClick={moveToHomePage}>
+    <Wrapper onClick={moveToHome}>
       <FontAwesomeIcon icon={faHeadphones} />
       <strong>ASMR</strong>
       <span>oom</span>
@@ -22,12 +22,13 @@ const Wrapper = styled.h1`
   display: flex;
   align-items: center;
   font-family: "Unbounded";
+  color: ${({ theme }) => theme.textColor};
   user-select: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.textColor};
 
   svg {
     margin-right: 10px;
+    font-size: 16px;
   }
 
   strong {
@@ -37,7 +38,7 @@ const Wrapper = styled.h1`
 
   span {
     font-size: 18px;
-    opacity: 0.3;
     letter-spacing: 2px;
+    opacity: 0.3;
   }
 `;

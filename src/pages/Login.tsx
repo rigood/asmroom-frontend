@@ -9,7 +9,7 @@ import {
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import Form from "../components/Form";
-import InputWithLabel from "../components/InputWithLabel";
+import Input from "../components/Input";
 import FormErrorMsg from "../components/FormErrorMsg";
 
 interface LoginForm {
@@ -69,7 +69,7 @@ const Login = () => {
     onCompleted,
   });
 
-  const onSubmit = handleSubmit((data: LoginForm) => {
+  const onValidSubmit = (data: LoginForm) => {
     if (isMutationLoading) return;
 
     const { email, password } = data;
@@ -81,14 +81,14 @@ const Login = () => {
         },
       },
     });
-  });
+  };
 
   return (
     <Wrapper>
       <Title>로그인</Title>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={handleSubmit(onValidSubmit)}>
         <>
-          <InputWithLabel
+          <Input
             label="이메일"
             type="email"
             placeholder="이메일을 입력해주세요."
@@ -103,7 +103,7 @@ const Login = () => {
           {errors?.email && errors.email.type === "pattern" && (
             <FormErrorMsg msg={errors?.email.message} />
           )}
-          <InputWithLabel
+          <Input
             label="비밀번호"
             type="password"
             placeholder="비밀번호를 입력해주세요."
@@ -111,7 +111,7 @@ const Login = () => {
               required: true,
             })}
           />
-          <InputWithLabel
+          <Input
             type="submit"
             value="로그인"
             disabled={!isValid || isMutationLoading}

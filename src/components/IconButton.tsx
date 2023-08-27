@@ -5,9 +5,10 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 interface IconButtonProps {
   icon: IconProp;
-  size?: number;
   title?: string;
   shouldFocus?: boolean;
+  size?: number;
+  type?: "button" | "submit";
   onClick?: () => void;
 }
 
@@ -15,15 +16,23 @@ const IconButton: React.ForwardRefRenderFunction<
   HTMLButtonElement,
   IconButtonProps
 > = (props, ref) => {
-  const { icon, size = 16, title = "", shouldFocus = false, onClick } = props;
+  const {
+    icon,
+    title = "",
+    shouldFocus = false,
+    size = 16,
+    type = "button",
+    onClick,
+  } = props;
 
   return (
     <Wrapper
-      $size={size}
       title={title}
+      $shouldFocus={shouldFocus}
+      $size={size}
+      type={type}
       onClick={onClick}
       ref={ref}
-      $shouldFocus={shouldFocus}
     >
       <FontAwesomeIcon icon={icon} />
     </Wrapper>
@@ -32,9 +41,7 @@ const IconButton: React.ForwardRefRenderFunction<
 
 export default forwardRef<HTMLButtonElement, IconButtonProps>(IconButton);
 
-const Wrapper = styled.button.attrs({
-  type: "button",
-})<{ $size: number; $shouldFocus: boolean }>`
+const Wrapper = styled.button<{ $size: number; $shouldFocus: boolean }>`
   padding: ${({ $size }) => $size / 2 + "px"};
   border-radius: 50%;
   color: ${({ theme }) => theme.textColor};
@@ -45,12 +52,12 @@ const Wrapper = styled.button.attrs({
 
   @media screen and (hover: hover) and (pointer: fine) {
     &:hover {
-      background: ${({ theme }) => theme.textColorBeforeHover};
+      background: ${({ theme }) => theme.textInvertedColor};
     }
 
     &:focus {
       background: ${({ $shouldFocus, theme }) =>
-        $shouldFocus && theme.textColorBeforeHover};
+        $shouldFocus && theme.textInvertedColor};
     }
   }
 `;

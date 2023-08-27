@@ -9,15 +9,17 @@ import { LOCALSTORAGE_TOKEN } from "./constants";
 
 const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 
-export const isLoggedInVar = makeVar(Boolean(token)); // false
-export const authTokenVar = makeVar(token); // null
+export const authTokenVar = makeVar(token);
+export const isLoggedInVar = makeVar(Boolean(token));
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri:
+    process.env.NODE_ENV === "production"
+      ? "https://asmroom-backend.herokuapp.com/graphql"
+      : "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
-  console.log("authLink 헤더", headers);
   return {
     headers: {
       ...headers,
@@ -32,14 +34,14 @@ export const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          isLoggedIn: {
-            read() {
-              return isLoggedInVar();
-            },
-          },
           token: {
             read() {
               return authTokenVar();
+            },
+          },
+          isLoggedIn: {
+            read() {
+              return isLoggedInVar();
             },
           },
         },

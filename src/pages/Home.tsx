@@ -1,56 +1,46 @@
-import styled from "styled-components";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Autoplay, EffectCoverflow, Pagination } from "swiper";
-import heroSlideList from "../data/heroSlideList";
-import HeroSlide from "../components/HeroSlide";
 import "swiper/swiper.min.css";
 import "swiper/components/pagination/pagination.min.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Autoplay, Pagination } from "swiper";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import slideList from "../data/slideList";
+import Slide from "../components/Slide";
+import Container from "../components/Container";
+import EpisodeListGrid from "../components/EpisodeListGrid";
 
-SwiperCore.use([Autoplay, EffectCoverflow, Pagination]);
+SwiperCore.use([Autoplay, Pagination]);
 
 const Home = () => {
   return (
     <>
       <CustomSwiper
-        centeredSlides={true}
         slidesPerView={1}
+        allowTouchMove
         loop={true}
         pagination={{
           clickable: true,
         }}
-        allowTouchMove
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
         }}
-        effect="coverflow"
-        coverflowEffect={{
-          slideShadows: false,
-          rotate: 0,
-          stretch: 0,
-          depth: 0,
-          modifier: 0,
-        }}
-        breakpoints={{
-          1100: {
-            slidesPerView: 1.7,
-            centeredSlides: true,
-            coverflowEffect: {
-              slideShadows: true,
-              rotate: 5,
-              stretch: 0,
-              depth: 100,
-              modifier: 2.5,
-            },
-          },
-        }}
       >
-        {heroSlideList.map(({ youtubeId, title, desc }) => (
-          <SwiperSlide key={youtubeId}>
-            <HeroSlide youtubeId={youtubeId} title={title} desc={desc} />
+        {slideList.map((props) => (
+          <SwiperSlide key={props.youtubeId}>
+            <Slide {...props} />
           </SwiperSlide>
         ))}
       </CustomSwiper>
+
+      <Container paddingTop="60px">
+        <ListTitle title="💎 Vito ASMR" channelId={1} />
+        <EpisodeListGrid channelId={1} />
+        <ListTitle title="✨ Myaling ASMR" channelId={2} />
+        <EpisodeListGrid channelId={2} />
+        <ListTitle title="🧸 Latte ASMR" channelId={3} />
+        <EpisodeListGrid channelId={3} />
+      </Container>
     </>
   );
 };
@@ -58,8 +48,6 @@ const Home = () => {
 export default Home;
 
 const CustomSwiper = styled(Swiper)`
-  padding-top: 10px;
-
   .swiper-pagination-bullets {
     bottom: 30px;
     .swiper-pagination-bullet {
@@ -67,10 +55,39 @@ const CustomSwiper = styled(Swiper)`
     }
   }
 
-  @media screen and (max-width: 1100px) {
-    padding-top: 0;
+  @media screen and (max-width: ${({ theme }) => theme.maxWidthDesktop}) {
     .swiper-pagination-bullets {
-      bottom: 10px;
+      bottom: 15px;
     }
   }
+`;
+
+interface ListTitleProps {
+  title: string;
+  channelId: number;
+}
+
+const ListTitle = ({ title, channelId }: ListTitleProps) => {
+  return (
+    <Wrapper>
+      <Title>{title}</Title>
+      <SLink to={`/channels/${channelId}`}>더보기 &rarr;</SLink>
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+`;
+
+const Title = styled.h2`
+  font-family: "pretendard600";
+  font-size: 24px;
+`;
+
+const SLink = styled(Link)`
+  font-size: 14px;
+  color: ${({ theme }) => theme.textInvertedColor};
 `;

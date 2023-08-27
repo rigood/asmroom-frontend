@@ -35,42 +35,61 @@ ${reset};
 a{
   color: inherit;
   text-decoration: none;
-
 }
 
 button{
-  font-family: inherit;
-  color: inherit;
   padding: 0;
   background: transparent;
   border: none;
+  font-family: inherit;
+  color: inherit;
   cursor: pointer;
 }
 
-input{
-color: inherit;
-font-family: inherit;
- &:-webkit-autofill,
-&:-webkit-autofill:hover, 
-&:-webkit-autofill:focus,
-&:-webkit-autofill:active {
-  -webkit-text-fill-color: ${({ theme }) => theme.textColor};;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
+div{
+  white-space: pre-wrap;
 }
 
-select{
+input{
+  border: none;
   font-family: inherit;
+  font-size: inherit;
   color: inherit;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover, 
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-text-fill-color: ${({ theme }) => theme.textColor};;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+label{
+  font-size: inherit;
+}
+
+select, option{
   background: transparent;
   border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+textarea{
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
 }
 
 body{
-  background: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.textColor};
+  background: ${({ theme }) => theme.background};
   font-family: "Pretendard400";
+  font-size: 16px;
+  color: ${({ theme }) => theme.textColor};
 }
 `;
 
