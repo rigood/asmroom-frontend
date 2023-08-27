@@ -73,7 +73,7 @@ const MyChannel = ({
     } = data;
 
     if (ok) {
-      await client.refetchQueries({ include: "active" });
+      await client.refetchQueries({ include: "all" });
       navigate("/");
     }
   };

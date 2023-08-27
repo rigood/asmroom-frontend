@@ -57,7 +57,7 @@ const EpisodeUpload = () => {
 
     if (ok) {
       navigate("/");
-      await client.refetchQueries({ include: "active" });
+      await client.refetchQueries({ include: "all" });
     }
   };
 

@@ -17,7 +17,7 @@ const EpisodeListGrid = ({ channelId }: EpisodeListGridProps) => {
 
   return (
     <Wrapper>
-      {episodes?.map((episode) => (
+      {episodes?.slice(0, 3).map((episode) => (
         <EpisodeItem key={episode.id} onClick={() => moveToEpisode(episode.id)}>
           <Thumbnail>
             <img

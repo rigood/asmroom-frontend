@@ -78,7 +78,7 @@ const Episode = () => {
 
     if (ok) {
       reset();
-      await client.refetchQueries({ include: "active" });
+      await client.refetchQueries({ include: "all" });
       alert("리뷰가 등록되었습니다 😀");
     }
   };
