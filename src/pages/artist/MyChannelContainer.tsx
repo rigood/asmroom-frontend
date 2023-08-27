@@ -27,12 +27,11 @@ export const MY_CHANNEL_QUERY = gql`
 `;
 
 const MyChannelContainer = () => {
-  const { data, loading, error, refetch } =
-    useQuery<MyChannelQuery>(MY_CHANNEL_QUERY);
+  const { data, loading, error } = useQuery<MyChannelQuery>(MY_CHANNEL_QUERY);
 
   if (!data || loading || error) return <Loading />;
 
-  return <MyChannel {...data.myChannel.channel!} refetch={refetch} />;
+  return <MyChannel {...data.myChannel.channel!} />;
 };
 
 export default MyChannelContainer;

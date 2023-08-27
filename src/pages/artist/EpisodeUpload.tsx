@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import Container from "../../components/Container";
 import ChannelNavBar from "../../components/ChannelNavBar";
 import SubContainer from "../../components/SubContainer";
@@ -48,6 +48,8 @@ const EpisodeUpload = () => {
 
   const navigate = useNavigate();
 
+  const client = useApolloClient();
+
   const onCompleted = async (data: CreateEpisodeMutation) => {
     const {
       createEpisode: { ok },
@@ -55,6 +57,7 @@ const EpisodeUpload = () => {
 
     if (ok) {
       navigate("/");
+      await client.refetchQueries({ include: "active" });
     }
   };
 

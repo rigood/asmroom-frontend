@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { Category } from "../../__generated__/graphql";
 import { EditChannelMutation } from "../../__generated__/graphql";
 import { EditChannelMutationVariables } from "../../__generated__/graphql";
@@ -36,7 +36,6 @@ interface MyChannelProps {
   description: string;
   photo: string;
   category: Category;
-  refetch: any;
 }
 
 export const categoryList = Object.values(Category);
@@ -46,7 +45,6 @@ const MyChannel = ({
   description,
   photo: initialPhoto,
   category: initialCategory,
-  refetch,
 }: MyChannelProps) => {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [preview, setPreview] = useState(initialPhoto || DefaultThumbnailImage);
@@ -67,13 +65,15 @@ const MyChannel = ({
 
   const navigate = useNavigate();
 
+  const client = useApolloClient();
+
   const onCompleted = async (data: EditChannelMutation) => {
     const {
       editChannel: { ok },
     } = data;
 
     if (ok) {
-      await refetch();
+      await client.refetchQueries({ include: "active" });
       navigate("/");
     }
   };

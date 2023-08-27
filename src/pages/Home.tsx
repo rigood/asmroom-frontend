@@ -34,8 +34,8 @@ const Home = () => {
       </CustomSwiper>
 
       <Container paddingTop="60px">
-        <ListTitle title="💎 Vito ASMR" channelId={1} />
-        <EpisodeListGrid channelId={1} />
+        <ListTitle title="💎 Vito ASMR" channelId={4} />
+        <EpisodeListGrid channelId={4} />
         <ListTitle title="✨ Myaling ASMR" channelId={2} />
         <EpisodeListGrid channelId={2} />
         <ListTitle title="🧸 Latte ASMR" channelId={3} />
