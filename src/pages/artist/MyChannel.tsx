@@ -96,10 +96,13 @@ const MyChannel = ({
       formBody.append("folderName", "channel");
 
       const { url } = await (
-        await fetch("http://localhost:4000/upload/", {
-          method: "POST",
-          body: formBody,
-        })
+        await fetch(
+          "https://asmroom-backend-b73cde5014a8.herokuapp.com/upload/",
+          {
+            method: "POST",
+            body: formBody,
+          }
+        )
       ).json();
 
       photoUrl = url;

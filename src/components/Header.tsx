@@ -40,7 +40,6 @@ const Header = () => {
   // 로그인 정보, 로그아웃
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data: userData } = useMe(!isLoggedIn);
-  console.log(`isLoggedIn(${isLoggedIn}) data:`, userData);
 
   const logout = () => {
     setUserDropdownMenuOpen(false);

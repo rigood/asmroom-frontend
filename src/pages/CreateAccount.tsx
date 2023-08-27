@@ -132,7 +132,7 @@ const CreateAccount = () => {
           <Input
             label="이메일"
             type="email"
-            placeholder="인증 메일이 발송될 이메일을 입력해주세요."
+            placeholder="이메일을 입력해주세요."
             {...register("email", {
               required: "이메일을 입력해주세요.",
               pattern: {
